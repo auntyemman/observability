@@ -7,10 +7,10 @@ import { EmitEvent } from 'src/common/decorators/event.decorator';
 @Injectable()
 export class UsersService {
   constructor(private readonly eventEmitter: EventEmitter2) {}
-  
-  @EmitEvent('userSignup.success') 
+
+  @EmitEvent('userSignup.success')
   create(createUserDto: CreateUserDto) {
-    return 'This action adds a new user';
+    return { user: 'Jibola' };
   }
 
   findAll() {

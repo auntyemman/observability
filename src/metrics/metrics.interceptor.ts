@@ -17,7 +17,8 @@ export class MetricsInterceptor implements NestInterceptor {
       tap(() => {
         const duration = Date.now() - start;
         const statusCode = response.statusCode;
-        const size = Buffer.byteLength(response.body);
+        const responseSize = response.outputSize;
+        const size = responseSize; //Buffer.byteLength(responseSize);
         this.metricsService.trackHttpRequest(
           method,
           statusCode,

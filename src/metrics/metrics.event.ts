@@ -1,32 +1,22 @@
-import { Injectable, OnModuleInit } from '@nestjs/common';
-import { EventEmitter2, OnEvent } from '@nestjs/event-emitter';
+import { Injectable } from '@nestjs/common';
+import { OnEvent } from '@nestjs/event-emitter';
 import { MetricsService } from './metrics.service';
 
 @Injectable()
-export class MetricsEvent implements OnModuleInit {
-  constructor(
-    private eventEmitter: EventEmitter2,
-    private readonly metricsService: MetricsService,
-  ) {}
+export class MetricsEvent {
+  constructor(private readonly metricsService: MetricsService) {
+    console.log('MetricsEvent Listener Initialized');
+  }
 
-  @OnEvent('userSignup.success')
-  handleUserSignupEvent(payload: { userId: number }) {
+  @OnEvent('userSignup.success', { async: true })
+  handleUserSignupEvent(payload: any) {
+    console.log('Received user signup event:', payload);
     this.metricsService.trackBusinessSuccess('users', 'userSignup');
-    console.log('Business Metric: User signup', payload);
-    // Store in DB, push to analytics service, etc.
   }
 
-  @OnEvent('order.success')
-  handleOrderSuccessEvent(payload: {
-    orderId: string;
-    amount: number;
-    userId: number;
-  }) {
-    console.log('Business Metric: Order Processed', payload);
-    // Store in DB, push to analytics service, etc.
-  }
-
-  onModuleInit() {
-    console.log('Metrics service initialized...');
+  @OnEvent('order.success', { async: true })
+  handleOrderSuccessEvent(payload: { orderId: string; amount: number; userId: number }) {
+    console.log('Received order success event:', payload);
+    this.metricsService.trackBusinessSuccess('orders', 'order.success');
   }
 }

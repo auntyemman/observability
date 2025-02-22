@@ -13,13 +13,14 @@ export function EmitEvent(eventName: string) {
       const eventEmitter: EventEmitter2 = this.eventEmitter;
       if (!eventEmitter) {
         throw new Error(
-          `EventEmitter2 instance not found in class ${target.constructor.name}. Ensure it's injected.`
+          `EventEmitter2 instance not found in class ${target.constructor.name}. Ensure it's injected.`,
         );
       }
 
       try {
         const result = await originalMethod.apply(this, args);
         eventEmitter.emit(eventName, result); // Emit event with result data
+        console.log(eventName, result, eventEmitter)
         return result;
       } catch (error) {
         throw new error(); // Propagate errors normally

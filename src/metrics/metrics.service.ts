@@ -8,6 +8,7 @@ import {
   Histogram,
   Gauge,
 } from 'prom-client';
+import { error } from 'console';
 
 @Injectable()
 export class MetricsService {
@@ -45,7 +46,7 @@ export class MetricsService {
     this.httpRequestErrors = new Counter({
       name: 'http_requests_errors_total',
       help: 'Total number of HTTP requests that resulted in error.',
-      labelNames: ['method', 'status'],
+      labelNames: ['method', 'status', 'errorMessage'],
     });
 
     // Response Size
@@ -92,7 +93,7 @@ export class MetricsService {
     this.businessFailureCount = new Counter({
       name: 'business_failures_total',
       help: 'Total number of failed business operations',
-      labelNames: ['service', 'operation'],
+      labelNames: ['service', 'operation', 'errorMessage'],
     });
 
     this.businessProcessingDuration = new Histogram({
@@ -108,7 +109,6 @@ export class MetricsService {
       this.memoryUsage.set(process.memoryUsage().heapUsed);
       this.cpuUsage.set(process.cpuUsage().system / 1e6); // Convert from microseconds to milliseconds
     }, 5000); // Update every 5 seconds
-
   }
 
   // Expose metrics via an endpoint
@@ -129,6 +129,11 @@ export class MetricsService {
       this.httpRequestErrors.inc({ method, status });
     }
     this.responseSize.observe(size);
+  }
+
+  trackHttpRequestError(method: string, status: string, errorMessage: string) {
+    console.log('Tracking HTTP Request Error:', method, status);
+    this.httpRequestErrors.inc({ method, status, errorMessage });
   }
 
   // Track System Metrics (e.g., CPU usage)
@@ -153,8 +158,12 @@ export class MetricsService {
     this.businessSuccessCount.inc({ service, operation });
   }
 
-  trackBusinessFailure(service: string, operation: string) {
-    this.businessFailureCount.inc({ service, operation });
+  trackBusinessFailure(
+    service: string,
+    operation: string,
+    errorMessage: string,
+  ) {
+    this.businessFailureCount.inc({ service, operation, errorMessage });
   }
 
   trackBusinessProcessingDuration(
