@@ -5,17 +5,20 @@ import { MetricsService } from './metrics.service';
 @Injectable()
 export class MetricsEvent {
   constructor(private readonly metricsService: MetricsService) {
-    console.log('MetricsEvent Listener Initialized');
   }
 
   @OnEvent('userSignup.success', { async: true })
   handleUserSignupEvent(payload: any) {
-    console.log('Received user signup event:', payload);
-    this.metricsService.trackBusinessSuccess('users', 'userSignup');
+    try {
+      console.log('Received user signup event:', payload);
+      this.metricsService.trackBusinessSuccess('users', 'userSignup');
+    } catch (error) {
+      console.log('signup error', error);
+    }
   }
 
   @OnEvent('order.success', { async: true })
-  handleOrderSuccessEvent(payload: { orderId: string; amount: number; userId: number }) {
+  handleOrderSuccessEvent(payload: any) {
     console.log('Received order success event:', payload);
     this.metricsService.trackBusinessSuccess('orders', 'order.success');
   }

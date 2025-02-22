@@ -19,14 +19,12 @@ export function EmitEvent(eventName: string) {
 
       try {
         const result = await originalMethod.apply(this, args);
-        eventEmitter.emit(eventName, result); // Emit event with result data
-        console.log(eventName, result, eventEmitter)
+        eventEmitter.emitAsync(eventName, result); // Emit event with result data
         return result;
       } catch (error) {
         throw new error(); // Propagate errors normally
       }
     };
-
     return descriptor;
   };
 }

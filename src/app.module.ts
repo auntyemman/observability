@@ -10,11 +10,10 @@ import { EventEmitterModule } from '@nestjs/event-emitter';
 import { MetricsEvent } from './metrics/metrics.event';
 
 @Module({
-  imports: [UsersModule, MetricsModule, EventEmitterModule.forRoot()],
+  imports: [EventEmitterModule.forRoot(), UsersModule, MetricsModule],
   controllers: [AppController],
   providers: [
     AppService,
-    MetricsEvent,
     {
       provide: APP_INTERCEPTOR,
       useClass: MetricsInterceptor,
