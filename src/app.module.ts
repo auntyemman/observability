@@ -7,10 +7,15 @@ import { MetricsInterceptor } from './metrics/metrics.interceptor';
 import { APP_FILTER, APP_INTERCEPTOR } from '@nestjs/core';
 import { GlobalExceptionsFilter } from './common/filters/exceptions-handler.filter';
 import { EventEmitterModule } from '@nestjs/event-emitter';
-import { MetricsEvent } from './metrics/metrics.event';
+import { DatabaseModule } from './infra/database/database.module';
 
 @Module({
-  imports: [EventEmitterModule.forRoot(), UsersModule, MetricsModule],
+  imports: [
+    EventEmitterModule.forRoot(),
+    UsersModule,
+    MetricsModule,
+    DatabaseModule,
+  ],
   controllers: [AppController],
   providers: [
     AppService,
