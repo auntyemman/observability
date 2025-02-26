@@ -22,7 +22,7 @@ export function EmitEvent(eventName: string) {
         eventEmitter.emitAsync(eventName, result); // Emit event with result data
         return result;
       } catch (error) {
-        throw new error(); // Propagate errors normally
+        throw error; // Propagate errors normally
       }
     };
     return descriptor;
