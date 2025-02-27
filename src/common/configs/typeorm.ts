@@ -12,7 +12,7 @@ export const dataSourceOptions: DataSourceOptions = {
   entities: [__dirname + '/../../**/*.entity.{ts,js}'],
   migrations: [__dirname + '/../../migrations/*.{ts,js}'],
   synchronize: environment.app.node_env === 'development', // true in development, false in production
-  // logging: environment.app.node_env !== 'production', // false in production, true in development
+  logging: environment.app.node_env !== 'production', // false in production, true in development
   migrationsRun: true, // Uncomment to automatically run migrations on app start
 };
 

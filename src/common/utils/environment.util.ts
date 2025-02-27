@@ -1,6 +1,11 @@
 import { config } from 'dotenv';
 
 config();
+console.log('DB_HOST', process.env.DB_HOST);
+console.log('DB_PORT', getEnvVariable('DB_PORT'));
+console.log('DB_USER', getEnvVariable('DB_USER'));
+console.log('DB_PASSWORD', getEnvVariable('DB_PASSWORD'));
+console.log('DB_NAME', getEnvVariable('DB_NAME'));
 
 export const environment = {
   database: {
