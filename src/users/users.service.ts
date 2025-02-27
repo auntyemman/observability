@@ -16,6 +16,7 @@ export class UsersService {
 
   @EmitEvent('userSignup.success')
   async create(createUserDto: CreateUserDto) {
+    // quick test
     const newUser = {
       name: 'Jibola Paso',
       email: 'jibola@gmail.com',
