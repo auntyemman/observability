@@ -41,7 +41,7 @@ services:
       - ./src/infra/database/data:/var/lib/postgresql/data
       - ./src/infra/database/etc/postgresql.conf:/etc/postgresql/postgresql.conf
       - ./src/infra/database/etc/pg_hba.conf:/etc/postgresql/pg_hba.conf
-    healthcheck:  # ✅ Add health check to ensure PostgreSQL is ready
+    healthcheck:  # Add health check to ensure PostgreSQL is ready
       test: ["CMD", "pg_isready", "-U", "${DB_USER}"]
       interval: 5s
       retries: 5
