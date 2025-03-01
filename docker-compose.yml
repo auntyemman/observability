@@ -48,9 +48,33 @@ services:
       start_period: 10s
     networks:
       - app_network
-  
+  prometheus:
+    image: prom/prometheus
+    container_name: prometheus
+    volumes:
+      - ./src/infra/prometheus/prometheus.yml:/etc/prometheus/prometheus.yml
+    ports:
+      - 9090:9090
+    networks:
+      - app_network
+    depends_on:
+      - observability
+
+  grafana:
+    image: grafana/grafana
+    container_name: grafana
+    ports:
+      - 3001:3000
+    depends_on:
+      - prometheus
+    networks:
+      - app_network
+    volumes:
+      - ./src/infra/grafana/data:/var/lib/grafana
+
 volumes:
   postgres_data:
+  grafana_data:
 
 networks:
   app_network:

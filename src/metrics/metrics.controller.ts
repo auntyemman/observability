@@ -1,6 +1,7 @@
 import {
   Controller,
   Get,
+  Response,
   Post,
   Body,
   Patch,
@@ -16,7 +17,13 @@ export class MetricsController {
 
   // TODO: to be better handled
   @Get()
-  async getMetrics() {
-    return this.metricsService.getMetrics();
+  async getMetrics(@Response() res) {
+    const metrics = await this.metricsService.getMetrics();
+    res.set('Content-Type', 'text/plain'); // Set the correct content type for Prometheus
+    res.send(metrics);
   }
+  // @Get()
+  // async getMetrics() {
+  //   return this.metricsService.getMetrics();
+  // }
 }
