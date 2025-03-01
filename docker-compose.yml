@@ -8,7 +8,7 @@ services:
     container_name: app_service
     environment:
       NODE_ENV: production
-      DB_HOST: database    
+      DB_HOST: database   
       POSTGRES_USER: ${DB_USER}
       POSTGRES_PASSWORD: ${DB_PASSWORD}
       POSTGRES_DB: ${DB_NAME}
@@ -30,15 +30,17 @@ services:
     restart: always
     env_file:
       - .env
-    environment:
-      DB_HOST: database    
+    environment:  
+      DB_HOST: database   
       POSTGRES_USER: ${DB_USER}
       POSTGRES_PASSWORD: ${DB_PASSWORD}
       POSTGRES_DB: ${DB_NAME}
     ports:
-      - 5432:5432
+      - 5434:5432
     volumes:
       - ./src/infra/database/data:/var/lib/postgresql/data
+      - ./src/infra/database/etc/postgresql.conf:/etc/postgresql/postgresql.conf
+      - ./src/infra/database/etc/pg_hba.conf:/etc/postgresql/pg_hba.conf
     healthcheck:  # ✅ Add health check to ensure PostgreSQL is ready
       test: ["CMD", "pg_isready", "-U", "${DB_USER}"]
       interval: 5s
