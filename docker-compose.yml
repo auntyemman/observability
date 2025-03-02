@@ -48,6 +48,35 @@ services:
       start_period: 10s
     networks:
       - app_network
+    
+  # PostgreSQL Exporter to expose DB metrics
+  postgres_exporter:
+    image: wrouesnel/postgres_exporter
+    container_name: postgres_exporter
+    environment:
+      # DATA_SOURCE_NAME format: postgresql://<user>:<password>@<host>:<port>/<database>?sslmode=disable
+      DATA_SOURCE_NAME: "postgresql://${DB_USER}:${DB_PASSWORD}@postgres_db:5432/${DB_NAME}?sslmode=disable"
+    ports:
+      - "9187:9187"
+    depends_on:
+      - database
+    networks:
+      - app_network
+  node_exporter:
+    image: prom/node-exporter
+    container_name: node_exporter
+    ports:
+      - "9100:9100"
+    volumes:
+    - /proc:/host/proc:ro
+    - /sys:/host/sys:ro
+    - /:/rootfs:ro
+    command: 
+      - '--path.procfs=/host/proc'
+      - '--path.sysfs=/host/sys'
+      - '--collector.filesystem.ignored-mount-points=^/(sys|proc|dev)($$|/)'
+    networks:
+      - app_network
   prometheus:
     image: prom/prometheus
     container_name: prometheus
@@ -59,6 +88,8 @@ services:
       - app_network
     depends_on:
       - observability
+      - postgres_exporter
+      - node_exporter
 
   grafana:
     image: grafana/grafana

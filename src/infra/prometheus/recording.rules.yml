@@ -1,0 +1,5 @@
+groups:
+  - name: app_service_recording_rules
+    rules:
+      - record: job:http_request_duration_seconds:avg
+        expr: avg(http_request_duration_seconds) by (job)

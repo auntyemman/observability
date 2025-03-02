@@ -1,5 +1,11 @@
 global:
-  scrape_interval: 5s  # Scrape every 5 seconds
+  scrape_interval: 5s
+  scrape_timeout: 3s
+  evaluation_interval: 5s
+
+rule_files:
+  - "alert.rules.yml"   # File containing alerting rules.
+  - "recording.rules.yml"   # File containing recording rules.
 
 scrape_configs:
   - job_name: 'app_service'
@@ -7,3 +13,30 @@ scrape_configs:
     scheme: 'http'
     static_configs:
       - targets: ['observability:3000']
+    relabel_configs:
+      - source_labels: [__address__]
+        target_label: instance
+      - source_labels: [job]
+        target_label: environment
+        replacement: production
+  # Scrape PostgreSQL metrics via exporter
+  - job_name: 'postgres'
+    metrics_path: '/metrics'
+    static_configs:
+      - targets: ['postgres_exporter:9187']
+  # Scrape Node Exporter (system metrics)
+  - job_name: 'node_exporter'
+    metrics_path: '/metrics'
+    static_configs:
+      - targets: ['node_exporter:9100']
+
+
+# global:
+#   scrape_interval: 5s  # Scrape every 5 seconds
+
+# scrape_configs:
+#   - job_name: 'app_service'
+#     metrics_path: '/metrics'
+#     scheme: 'http'
+#     static_configs:
+#       - targets: ['observability:3000']
