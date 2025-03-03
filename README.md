@@ -2,13 +2,13 @@
 
 ## Overview  
 
-This repository showcases a complete **observability strategy** implemented in a **NestJS application** with PostgreSQL. The observability stack includes **application metrics, business metrics, HTTP and error metrics, infrastructure-level metrics, logging, tracing, monitoring, and alerting** using Prometheus, Grafana, Loki, and Alertmanager.  
+This repository showcases a complete **observability strategy** implemented in a **NestJS application** with PostgreSQL. The observability stack includes **application metrics, business metrics, HTTP and error metrics, infrastructure-level metrics, logging, tracing, monitoring, and alerting** using Prometheus, Grafana, and Alertmanager.  
 
 ---
 
 ## 🔥 Observability Strategy  
 
-Observability is implemented across **three main layers**:  
+Observability is implemented across **three main layers**:
 
 1. **Application Metrics** – Collected using Prometheus metrics and custom instrumentation.  
 2. **Infrastructure Metrics** – Monitored via `node_exporter` and `postgres_exporter`.  
@@ -76,6 +76,59 @@ PostgreSQL-specific metrics include:
 
 ---
 
+## Sample PromQL Queries
+### Application Metrics
+- Request Count:
+  ```
+  sum(rate(http_requests_total[5m]))
+  ```
+- Response Time (95th percentile):
+  ```
+  histogram_quantile(0.95, rate(http_request_duration_seconds_bucket[5m]))
+  ```
+
+### PostgreSQL Metrics
+- Active Connections:
+  ```
+  pg_stat_database_numbackends{datname="$DB_NAME"}
+  ```
+- Slow Queries:
+  ```
+  rate(pg_stat_statements_total_time[5m])
+  ```
+
+### Node Metrics
+- CPU Usage:
+  ```
+  100 - (avg by (instance) (irate(node_cpu_seconds_total{mode="idle"}[5m])) * 100)
+  ```
+- Disk Usage:
+  ```
+  node_filesystem_avail_bytes / node_filesystem_size_bytes * 100
+  ```
+# Sample CPU Gauge Panel
+![alt text](cpu_gauge.png)
+
+## Running the Stack
+Start all services using Docker Compose:
+
+```sh
+docker-compose up -d --build
+```
+
+This will spin up the following services:
+- `observability` (Application)
+- `database` (PostgreSQL)
+- `postgres_exporter`
+- `node_exporter`
+- `prometheus`
+- `grafana`
+
+## Grafana Dashboards
+To access Grafana:
+- Open `http://localhost:3001`
+- Login with `admin/admin`
+- Import the provided dashboard JSON files
 
 <p align="center">
   <a href="http://nestjs.com/" target="blank"><img src="https://nestjs.com/img/logo-small.svg" width="120" alt="Nest Logo" /></a>
