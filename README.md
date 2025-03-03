@@ -1,3 +1,82 @@
+# 📊 Observability in My Application  
+
+## Overview  
+
+This repository showcases a complete **observability strategy** implemented in a **NestJS application** with PostgreSQL. The observability stack includes **application metrics, business metrics, HTTP and error metrics, infrastructure-level metrics, logging, tracing, monitoring, and alerting** using Prometheus, Grafana, Loki, and Alertmanager.  
+
+---
+
+## 🔥 Observability Strategy  
+
+Observability is implemented across **three main layers**:  
+
+1. **Application Metrics** – Collected using Prometheus metrics and custom instrumentation.  
+2. **Infrastructure Metrics** – Monitored via `node_exporter` and `postgres_exporter`.  
+3. **Monitoring & Visualization** – Dashboards and alerts set up with Prometheus, Grafana, and Alertmanager.  
+
+---
+
+## 📌 Application-Level Observability  
+
+### ✅ Default Metrics  
+By default, the application exposes Prometheus metrics such as:  
+
+- `process_cpu_seconds_total` – Tracks CPU usage of the app.  
+- `process_resident_memory_bytes` – Monitors memory consumption.  
+- `http_requests_total` – Counts total HTTP requests.  
+- `http_request_duration_seconds` – Captures request latency distributions.  
+
+These metrics are exposed at the `/metrics` endpoint.  
+
+### 🎯 Business Metrics (Event-Driven Observability)  
+Business-critical metrics are collected using an **event bus**:  
+
+- **User Sign-ups** (`user_signup_total`)  
+- **Transaction Success/Failure** (`transaction_success_total`, `transaction_failure_total`)  
+- **Order Processing Time** (`order_processing_duration_seconds`)  
+
+These metrics help track domain-specific events and performance.  
+
+### 🌍 HTTP Metrics (Using an Interceptor)  
+A global **NestJS interceptor** is used to log and track HTTP requests:  
+
+- **Request counts** per route (`http_requests_total`).  
+- **Request duration** (`http_request_duration_seconds`).  
+- **Response status codes** (`http_response_status_code`).  
+
+### 🚨 Error Metrics (Using a Custom Logger)  
+A custom **NestJS logger** tracks error occurrences:  
+
+- **Application Errors** (`application_errors_total`)  
+- **Database Errors** (`database_errors_total`)  
+- **Authentication Failures** (`auth_failures_total`)  
+
+Errors are also logged and sent to **Loki** for further analysis.  
+
+---
+
+## 📡 Infrastructure-Level Observability  
+
+### 📌 Host System Metrics (via `node_exporter`)  
+Node Exporter provides **hardware and OS-level metrics**, including:  
+
+- **CPU Usage** (`node_cpu_seconds_total`)  
+- **Memory Utilization** (`node_memory_Active_bytes`)  
+- **Disk Usage** (`node_filesystem_size_bytes`, `node_filesystem_free_bytes`)  
+- **System Load** (`node_load1`, `node_load5`, `node_load15`)  
+- **Network Traffic** (`node_network_receive_bytes_total`, `node_network_transmit_bytes_total`)  
+
+### 🗄️ Database Metrics (via `postgres_exporter`)  
+PostgreSQL-specific metrics include:  
+
+- **Active Connections** (`pg_stat_activity_count`)  
+- **Transaction Rate** (`pg_stat_database_xact_commit`)  
+- **Cache Hit Ratio** (`pg_stat_database_blks_hit`)  
+- **Slow Queries** (`pg_stat_statements_total_time`)  
+
+---
+
+
 <p align="center">
   <a href="http://nestjs.com/" target="blank"><img src="https://nestjs.com/img/logo-small.svg" width="120" alt="Nest Logo" /></a>
 </p>
