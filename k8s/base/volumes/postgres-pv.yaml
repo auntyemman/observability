@@ -8,5 +8,5 @@ spec:
   accessModes:
     - ReadWriteOnce
   hostPath:
-  # Replace "/path/to/your/data" with the actual path to your PostgreSQL data directory
+  # Replace "/path/to/your/data" with the actual path to your PostgreSQL data directory.
     path: "./src/infra/database/data"
