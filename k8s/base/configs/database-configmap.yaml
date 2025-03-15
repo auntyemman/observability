@@ -1,0 +1,8 @@
+kind: ConfigMap
+apiVersion: v1
+metadata:
+  name: dtabase-configmap
+  namespace: observability
+data:
+  db_host: localhost
+  db_user: postgres
