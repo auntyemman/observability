@@ -1,0 +1,7 @@
+apiVersion: 1
+kind: ConfigMap
+metadata:
+  name: prometheus-configmap
+  namespace: dev
+data:
+  key: default # no data yet
