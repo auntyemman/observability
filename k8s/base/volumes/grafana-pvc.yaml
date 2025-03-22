@@ -1,12 +1,12 @@
 apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:
-  name: MYAPP
-  namespace: default
+  name: grafana-pvc
+  namespace: dev
   labels:
-    app: MYAPP
+    app: grafana-pvc
 spec:
-  storageClassName: rook-ceph-block
+  storageClassName: manual
   accessModes:
   - ReadWriteOnce
   resources:

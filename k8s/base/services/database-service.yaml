@@ -1,35 +1,14 @@
-apiVersion: apps/v1
-kind: StatefulSet
+apiVersion: v1
+kind: Service
 metadata:
-  name: observability-db-service
-  namespace: observability
+  name: database-svc
+  namespace: dev
 spec:
   selector:
-    matchLabels:
-      app: observability # has to match .spec.template.metadata.labels
-  serviceName: "observability"
-  replicas: 3 # by default is 1
-  template:
-    metadata:
-      labels:
-        app: observability # has to match .spec.selector.matchLabels
-    spec:
-      terminationGracePeriodSeconds: 10
-      containers:
-      - name: observability
-        image: postgres:17
-        ports:
-        - containerPort: 5432
-          name: web
-        volumeMounts:
-        - name: postgres-persistent-storage
-          mountPath: /var/lib/postgresql/data
-  volumeClaimTemplates:
-  - metadata:
-      name: postgres-pvc
-    spec:
-      accessModes: [ "ReadWriteOnce" ]
-      storageClassName: "my-storage-class"
-      resources:
-        requests:
-          storage: 1Gi
+    app: pg-deployment
+  type: NodePort
+  ports:
+    protocol: TCP
+    port: 5432
+    targetPort: 5432
+    nodePort: 3005

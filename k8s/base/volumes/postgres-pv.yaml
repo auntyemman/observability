@@ -2,11 +2,15 @@ apiVersion: v1
 kind: PersistentVolume
 metadata:
   name: postgres-pv
+  namespace: dev
 spec:
   capacity:
-    storage: 1Gi
+    storage: 2Gi # Allocating 2GB of storage for the PostgreSQL data directory.
   accessModes:
-    - ReadWriteOnce
+    - ReadWriteOnce # This volume can be mounted as read-write by a single node.
+  persistentVolumeReclaimPolicy: Retain
+  storageClassName: rook-ceph-block # or manually created
   hostPath:
   # Replace "/path/to/your/data" with the actual path to your PostgreSQL data directory.
+  # host path not ideal for production, consider using a cloud storage solution like AWS EBS blocks
     path: "./src/infra/database/data"

@@ -3,5 +3,21 @@ kind: ConfigMap
 metadata:
   name: prometheus-configmap
   namespace: dev
+labels: prometheus-configmap
 data:
-  key: default # no data yet
+  prometheus.yml: |
+    global:
+      scrape_interval: 15s  # Scrape targets every 15 seconds
+    
+    scrape_configs:
+      - job_name: 'observability'
+        static_configs:
+          - targets: ['observability-app-svc:3000']
+
+      - job_name: 'kubernetes-nodes'
+        kubernetes_sd_configs:
+          - role: node
+
+      - job_name: 'kubernetes-pods'
+        kubernetes_sd_configs:
+          - role: pod

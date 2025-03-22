@@ -1,7 +1,11 @@
-kind: ConfigMap
 apiVersion: v1
+kind: ConfigMap
 metadata:
-  name: grafana-configmap
-  namespace: dev
+  name: grafana-configMap
 data:
-  key: default # no data yet
+  prometheus-datasource.yaml: |
+    apiVersion: 1
+    datasources:
+      - name: Prometheus
+        type: prometheus
+        url: http://prometheus:9090

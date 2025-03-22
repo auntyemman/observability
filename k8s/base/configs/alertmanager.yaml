@@ -1,0 +1,17 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: alertmanager-config
+data:
+  alertmanager.yml: |
+    route:
+      receiver: 'default-receiver'
+    receivers:
+      - name: 'default-receiver'
+        email_configs:
+          - to: 'admin@example.com'
+            from: 'alertmanager@example.com'
+            smarthost: 'smtp.example.com:587'
+            auth_username: 'alertuser'
+            auth_identity: 'alertuser'
+            auth_password: 'alertpassword'
