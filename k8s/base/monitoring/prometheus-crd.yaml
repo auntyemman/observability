@@ -6,7 +6,7 @@ spec:
   replicas: 2
   serviceMonitorSelector:
     matchLabels:
-      app: observability-app
+      app: observability-app # target app label
   resources:
     requests:
       memory: 400Mi
